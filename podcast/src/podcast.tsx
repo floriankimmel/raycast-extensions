@@ -23,24 +23,19 @@ const readEpisodes = () => fs.promises.readdir(podcastRoot)
 function EpisodeList() {
     const data = useQuery("episodes", readEpisodes)?.data ?? [];
     return ( 
-        <List isLoading={data?.length === 0}
-            searchBarPlaceholder="Filter by name ...">
-            { data.map((episode) => <EpisodeItem key={episode} name={episode}/>)
-        }  
+        <List searchBarPlaceholder="Filter by name ...">
+            { data.map((title) => <Episode name={title} key={title}/>) }  
         </List>
     )
 }
 
-function EpisodeItem({ name } : EpisodeItemProps) {
+function Episode({ name } : EpisodeItemProps) {
     return (
-        <List.Item
-            title={name}
-            actions={
-                <ActionPanel title="Automation">
-                    <Action title="Run" onAction={() => exeAutomation(name)} />
-                </ActionPanel>
-            }
-         />
+        <List.Item title={name} actions={
+            <ActionPanel title="Automation">
+                <Action title="Run" onAction={() => exeAutomation(name)} />
+            </ActionPanel>
+        } />
     )
 }
 
