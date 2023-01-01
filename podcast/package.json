@@ -21,7 +21,9 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.45.2",
-    "@types/filesystem": "^0.0.32"
+    "@types/filesystem": "^0.0.32",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.2"
   },
   "devDependencies": {
     "@types/node": "18.8.3",

@@ -1,42 +1,34 @@
 import {Action, ActionPanel, List} from "@raycast/api";
+import {QueryClient, QueryClientProvider, useQuery} from "react-query";
 import * as fs from 'fs';
-import {useEffect, useState} from "react";
 
 const podcastRoot = '/Users/fkimmel/Dropbox/Podcast/Aufnahmen';
 
+interface EpisodeItemProps {
+  name: string;
+}
+
 export default function PodcastCommand() {
-    const [podcast,setPodcast] = useState({ episodes: new Array<string>() });
-
-    useEffect(() => {
-        readEpisodes()
-            .then(data => 
-                setPodcast(() => { return { episodes: data }})
-            )
-    }, [])
-
+    const queryClient = new QueryClient()
     return (
-        <List isLoading={podcast.episodes?.length === 0}
-              searchBarPlaceholder="Filter by name ...">
-            { podcast
-                .episodes
-                .map((episode) => <EpisodeItem key={episode} name={episode}/>)
-            }  
-        </List>
-
+        <QueryClientProvider client={queryClient}>
+            <EpisodeList/>
+        </QueryClientProvider>
     );
 }
 
-
-async function readEpisodes() {
-
-    const files = fs.promises.readdir(podcastRoot)
+const readEpisodes = () => fs.promises.readdir(podcastRoot)
         .then(files => files.filter((file) => !file.startsWith(".")));
 
-    return files
-}
-
-interface EpisodeItemProps {
-  name: string;
+function EpisodeList() {
+    const data = useQuery("episodes", readEpisodes)?.data ?? [];
+    return ( 
+        <List isLoading={data?.length === 0}
+            searchBarPlaceholder="Filter by name ...">
+            { data.map((episode) => <EpisodeItem key={episode} name={episode}/>)
+        }  
+        </List>
+    )
 }
 
 function EpisodeItem({ name } : EpisodeItemProps) {
