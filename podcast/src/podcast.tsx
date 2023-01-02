@@ -37,6 +37,10 @@ function Episode({ name } : EpisodeItemProps) {
                     title="Open" 
                     shortcut={{ modifiers: ["cmd"], key: "enter" }}
                     onAction={() => openEpisode(name)} />
+                <Action.Trash
+                    title="Delete" 
+                    shortcut={{ modifiers: ["cmd"], key: "d" }}
+                    paths={`${podcastRoot}/${name}/`} />
             </ActionPanel>
         } />
     )
