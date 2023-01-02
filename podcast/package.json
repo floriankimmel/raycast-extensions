@@ -17,11 +17,20 @@
       "subtitle": "Automated Podcast Workflow",
       "description": "",
       "mode": "view"
+    },
+    {
+      "name": "plan-social-media",
+      "title": "Plan Social Media",
+      "subtitle": "Generate social media posting for episode    ",
+      "description": "",
+      "mode": "view"
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.45.2",
     "@types/filesystem": "^0.0.32",
+    "csv-stringify": "^6.2.3",
+    "moment": "^2.29.4",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2"
   },
