@@ -33,10 +33,22 @@ function Episode({ name } : EpisodeItemProps) {
     return (
         <List.Item title={name} actions={
             <ActionPanel title="Automation">
-                <Action title="Run" onAction={() => exeAutomation(name)} />
+                <Action 
+                    title="Run" 
+                    onAction={() => exeAutomation(name)} />
+                <Action 
+                    title="Open" 
+                    shortcut={{ modifiers: ["cmd"], key: "enter" }}
+                    onAction={() => openEpisode(name)} />
             </ActionPanel>
         } />
     )
+}
+
+const openEpisode = (name : string) => {
+    const exec = require('child_process').execSync;
+    const path = `${podcastRoot}/${name}/`
+    exec(`open "${path}"`)
 }
 
 const exeAutomation = (name : string) => {
