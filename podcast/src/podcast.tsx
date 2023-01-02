@@ -1,8 +1,7 @@
 import {Action, ActionPanel, List} from "@raycast/api";
 import {QueryClient, QueryClientProvider, useQuery} from "react-query";
-import * as fs from 'fs';
+import {podcastRoot, readEpisodes} from "./readEpisodes";
 
-const podcastRoot = '/Users/fkimmel/Dropbox/Podcast/Aufnahmen';
 
 interface EpisodeItemProps {
   name: string;
@@ -17,8 +16,6 @@ export default function PodcastCommand() {
     );
 }
 
-const readEpisodes = () => fs.promises.readdir(podcastRoot)
-        .then(files => files.filter((file) => !file.startsWith(".")));
 
 function EpisodeList() {
     const data = useQuery("episodes", readEpisodes)?.data ?? [];
@@ -56,3 +53,4 @@ const exeAutomation = (name : string) => {
     const command = `cd ${podcastRoot}/${name} && podcast ${name}.m4a && exit`
     exec(`osascript -e 'tell app "Terminal" to do script "${command}"'`)
 }
+
