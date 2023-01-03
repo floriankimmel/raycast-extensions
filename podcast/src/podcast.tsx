@@ -4,7 +4,8 @@ import {podcastRoot, readEpisodes} from "./readEpisodes";
 
 
 interface EpisodeItemProps {
-  name: string;
+    name: string;
+    callback: () => void;
 }
 
 export default function PodcastCommand() {
@@ -18,15 +19,16 @@ export default function PodcastCommand() {
 
 
 function EpisodeList() {
-    const data = useQuery("episodes", readEpisodes)?.data ?? [];
+    const response = useQuery("episodes", readEpisodes);
+    const data = response?.data ?? [];
     return ( 
         <List searchBarPlaceholder="Filter by name ...">
-            { data.map((title) => <Episode name={title} key={title}/>) }  
+            { data.map((title) => <Episode name={title} key={title} callback={() => response.refetch()}/>) }  
         </List>
     )
 }
 
-function Episode({ name } : EpisodeItemProps) {
+function Episode({ name, callback } : EpisodeItemProps) {
     return (
         <List.Item title={name} actions={
             <ActionPanel title="Automation">
@@ -37,15 +39,22 @@ function Episode({ name } : EpisodeItemProps) {
                     title="Open" 
                     shortcut={{ modifiers: ["cmd"], key: "enter" }}
                     onAction={() => openEpisode(name)} />
-                <Action.Trash
+                <Action
                     title="Delete" 
                     shortcut={{ modifiers: ["cmd"], key: "d" }}
-                    paths={`${podcastRoot}/${name}/`} />
+                    onAction={() => deleteEpisode(name, callback)} />
             </ActionPanel>
         } />
     )
 }
 
+const deleteEpisode = (name : string, callback: () => void) => {
+    const exec = require('child_process').execSync;
+    const path = `${podcastRoot}/${name}/`
+    exec(`rm -rf "${path}"`)
+
+    refresh()
+}
 const openEpisode = (name : string) => {
     const exec = require('child_process').execSync;
     const path = `${podcastRoot}/${name}/`
