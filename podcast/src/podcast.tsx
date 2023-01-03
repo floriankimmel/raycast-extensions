@@ -53,7 +53,7 @@ const deleteEpisode = (name : string, callback: () => void) => {
     const path = `${podcastRoot}/${name}/`
     exec(`rm -rf "${path}"`)
 
-    refresh()
+    callback()
 }
 const openEpisode = (name : string) => {
     const exec = require('child_process').execSync;
