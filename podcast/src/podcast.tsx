@@ -23,7 +23,13 @@ function EpisodeList() {
     const data = response?.data ?? [];
     return ( 
         <List searchBarPlaceholder="Filter by name ...">
-            { data.map((title) => <Episode name={title} key={title} refreshEpisodes={() => response.refetch()}/>) }  
+            { data.map((title) =>
+                <Episode
+                    name={title}
+                    key={title}
+                    refreshEpisodes={() => response.refetch()}
+                />)
+            }
         </List>
     )
 }
