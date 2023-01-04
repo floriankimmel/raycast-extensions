@@ -49,6 +49,10 @@ function Episode({ name, refreshEpisodes } : EpisodeItemProps) {
                     title="Delete" 
                     shortcut={{ modifiers: ["cmd"], key: "d" }}
                     onAction={() => { deleteEpisode(name); refreshEpisodes(); }} />
+                <Action
+                    title="Render" 
+                    shortcut={{ modifiers: ["cmd"], key: "r" }}
+                    onAction={() => { renderEpisode(name); }} />
             </ActionPanel>
         } />
     )
@@ -65,6 +69,11 @@ const openEpisode = (name : string) => {
     exec(`open "${path}"`)
 }
 
+const renderEpisode = (name : string) => {
+    const exec = require('child_process').execSync;
+    const command = `cd ${podcastRoot}/${name} && podcast ${name}.m4a && exit`
+    exec(`osascript -e 'tell application "Keyboard Maestro Engine" to do script "E4DC21BF-FA11-4B68-AEAC-0258FE93E270" with parameter "{name:'Episode', value: ${name}}"'`)
+}
 const exeAutomation = (name : string) => {
     const exec = require('child_process').execSync;
     const command = `cd ${podcastRoot}/${name} && podcast ${name}.m4a && exit`
